@@ -7,10 +7,10 @@ class Libnoise < Formula
   
   def install
     ENV.deparallelize
-    system "cmake", "-DCMAKE_INSTALL_PREFIX=#{prefix}","."
+    system "cmake",".", *std_cmake_args
     system "make"
+    system "cp","-r","cmake","#{prefix}/lib/"
     system "make","install"
-    system "cp","-r","cmake","#{prefix}/lib"
   end
 
 

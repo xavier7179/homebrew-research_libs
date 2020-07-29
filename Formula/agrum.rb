@@ -1,7 +1,7 @@
 class Agrum < Formula
   desc "C++ library for graphical models"
   homepage "https://agrum.gitlab.io/pages/agrum.html"
-  url "https://gitlab.com/agrumery/aGrUM.git", :tag => "0.18.0", :revision => "526a9cd8dcbdaee3b0cbbfcb0551511e74a0998f"
+  url "https://gitlab.com/agrumery/aGrUM.git", :tag => "0.18.1", :revision => "b6c290591e7c4604c8bb7d123f5c768020a07688"
 
   depends_on "bash" => :build
   depends_on "cmake" => [:build, :test]
