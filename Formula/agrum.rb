@@ -1,17 +1,21 @@
 class Agrum < Formula
   desc "C++ library for graphical models"
   homepage "https://agrum.gitlab.io/pages/agrum.html"
-  url "https://gitlab.com/agrumery/aGrUM.git", :tag => "0.18.1", :revision => "b6c290591e7c4604c8bb7d123f5c768020a07688"
-
+  url "https://gitlab.com/agrumery/aGrUM.git", :tag => "0.18.2", :revision => "7cefa2fc9094a9ff3e285ab86d62897ef03e9a73"
+  # Previous 0.18.1 OSX working version in case you need it
+  #head "https://gitlab.com/agrumery/aGrUM.git", :branch => "feature/odbc4mac", :revision => "65e744149497a8cc5b69620d3aa55fd29d7e17e1"
+  
   depends_on "bash" => :build
   depends_on "cmake" => [:build, :test]
   depends_on "coreutils" => :build
+  depends_on "mariadb-connector-odbc" => :build
   depends_on "python@3.8" => :build
 
   def install
+    inreplace "src/cmake/Nanodbc.agrum.cmake",
+              "option(USE_NANODBC \"Build with nanodbc support\" ON)",
+              "option(USE_NANODBC \"Build with nanodbc support\" OFF)"
     ENV.deparallelize
-    #ENV.CC="$(which clang)"
-    #ENV.CCX="$(which clang++)"
     system "python", "act", "install", "release", "aGrUM", "--static", "-d", prefix
   end
 
