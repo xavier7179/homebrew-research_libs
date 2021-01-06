@@ -1,7 +1,7 @@
 class Agrum < Formula
   desc "C++ library for graphical models"
   homepage "https://agrum.gitlab.io/pages/agrum.html"
-  url "https://gitlab.com/agrumery/aGrUM.git", :tag => "0.18.2", :revision => "7cefa2fc9094a9ff3e285ab86d62897ef03e9a73"
+  url "https://gitlab.com/agrumery/aGrUM.git", :tag => "0.19.0", :revision => "86e9640e6603bddcab91e4a35a896c2c8a24e7ea"
   # Previous 0.18.1 OSX working version in case you need it
   #head "https://gitlab.com/agrumery/aGrUM.git", :branch => "feature/odbc4mac", :revision => "65e744149497a8cc5b69620d3aa55fd29d7e17e1"
   
