@@ -5,16 +5,26 @@ class Agrum < Formula
   # Previous 0.18.1 OSX working version in case you need it
   #head "https://gitlab.com/agrumery/aGrUM.git", :branch => "feature/odbc4mac", :revision => "65e744149497a8cc5b69620d3aa55fd29d7e17e1"
   
+  option "with-openmp", "Build the formula with OpenMP support"
+  
   depends_on "bash" => :build
   depends_on "cmake" => [:build, :test]
   depends_on "coreutils" => :build
   depends_on "mariadb-connector-odbc" => :build
+  if build.with? "openmp"
+      depends_on "libomp" => [:build, :test]
+  end
   depends_on "python@3.8" => :build
 
   def install
     inreplace "src/cmake/Nanodbc.agrum.cmake",
               "option(USE_NANODBC \"Build with nanodbc support\" ON)",
               "option(USE_NANODBC \"Build with nanodbc support\" OFF)"
+    if build.without? "openmp"
+        inreplace "CMakeLists.txt",
+                  "option(USE_OPENMP \"use openmp\" ON)",
+                  "option(USE_OPENMP \"use openmp\" OFF)"
+    end
     ENV.deparallelize
     system "python", "act", "install", "release", "aGrUM", "--static", "-d", prefix
   end
@@ -30,12 +40,14 @@ class Agrum < Formula
       cmake_minimum_required(VERSION 2.8)
       set (CMAKE_CXX_STANDARD 14)
 
+      if build.with? "openmp"
       find_package(OpenMP)
       if (OPENMP_FOUND)
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
         set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
         set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
       endif()
+      end
 
       find_package(aGrUM)
 
@@ -68,5 +80,8 @@ class Agrum < Formula
     system "cmake", "."
     system "make"
     assert_equal "{World=>2 , Hello=>1}", shell_output("./foo").strip
+    if build.with? "all_tests"
+        system  "python", "act", "test", "release", "agrum", "-t", "all"
+    end
   end
 end
